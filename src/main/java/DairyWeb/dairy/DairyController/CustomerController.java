@@ -2,6 +2,7 @@ package DairyWeb.dairy.DairyController;
 
 import DairyWeb.dairy.DairyEntities.Customer;
 import DairyWeb.dairy.DairyServices.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class CustomerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer request){
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer request){
         return ResponseEntity.status(200).body(customerService.createCustomer(request));
     }
     @GetMapping("/getAll")

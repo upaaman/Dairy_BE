@@ -1,9 +1,7 @@
 package DairyWeb.dairy.DairyEntities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import DairyWeb.dairy.DairyDTOs.ResponseDTOs.MilkRates;
+import jakarta.persistence.*;
 
 @Entity
 public class Customer {
@@ -17,12 +15,6 @@ public class Customer {
         return id;
     }
     public Customer(){}
-    public Customer(Long id, String name, String contact, String address) {
-        this.id = id;
-        this.name = name;
-        this.contact = contact;
-        this.address = address;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -55,4 +47,22 @@ public class Customer {
     private String contact;
     private String address;
 
+    public MilkRates getMilkRates() {
+        return milkRates;
+    }
+
+    public void setMilkRates(MilkRates milkRates) {
+        this.milkRates = milkRates;
+    }
+
+    @Embedded
+    private MilkRates milkRates;
+
+    public Customer(Long id, String name, String contact, String address, MilkRates milkRates) {
+        this.id = id;
+        this.name = name;
+        this.contact = contact;
+        this.address = address;
+        this.milkRates = milkRates;
+    }
 }
