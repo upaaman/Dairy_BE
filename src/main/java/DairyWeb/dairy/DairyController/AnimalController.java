@@ -1,6 +1,7 @@
 package DairyWeb.dairy.DairyController;
 
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyServices.AnimalService;
@@ -39,6 +40,14 @@ public class AnimalController {
         return ResponseEntity.status(200).body(animal);
         }
         return ResponseEntity.status(400).body(null);
+    }
+    @PatchMapping("/update/{id}")
+    public String updateAnimalById(
+            @PathVariable Long id,
+         @Valid   @RequestBody AnimalUpdateReqDTO updatedAnimalReq){
+
+         animalService.updateAnimal(id,updatedAnimalReq);
+         return "Animal updated successfully.";
     }
 
     @DeleteMapping("/deleteAnimal/{id}")

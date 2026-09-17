@@ -1,9 +1,11 @@
 package DairyWeb.dairy.DairyServices;
 
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
+import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.AnimalRepo;
 import org.springframework.stereotype.Service;
 
@@ -59,6 +61,28 @@ public class AnimalService {
                         "Animal not found with id: " + id
                 )
         );
+    }
+    public String updateAnimal(Long id, AnimalUpdateReqDTO request){
+        Animal animal=animalRepo.findById(id)
+                .orElseThrow(()->
+                      new  AnimalNotFoundException("Animal not found with id :"+ id));
+        if(request.getName()!=null){
+            if (request.getName().isBlank()) {
+                throw new BusinessException(
+                        "Animal name cannot be empty."
+                );
+            }
+
+            animal.setName(request.getName().trim());
+        }
+        if(request.getStatus()!=null){
+            animal.setStatus(request.getStatus());
+        }
+        if(request.getNotes()!=null){
+            animal.setNotes(request.getNotes().trim());
+        }
+     Animal updatedAnimal=   animalRepo.save(animal);
+       return "Done";
     }
 
     public String deleteAnimalById(Long Id){
