@@ -1,5 +1,7 @@
 package DairyWeb.dairy.DairyServices;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.CustomerSellerUpdateDTO;
 import DairyWeb.dairy.DairyEntities.Customer;
+import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.CustomerRepo;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,26 @@ public class CustomerService {
     public Customer createCustomer(Customer customer){
 
         return customerRepo.save(customer);
+    }
+    public Customer updateCustomer(Long id, CustomerSellerUpdateDTO request){
+    Customer updatedCustomer=customerRepo.findById(id).orElseThrow(
+            ()->new BusinessException("Customer not found with this id "+ id));
+
+        if(request.getName()!=null){
+         updatedCustomer.setName(request.getName());
+        }
+        if(request.getAddress()!=null){
+            updatedCustomer.setAddress(request.getAddress());
+        }
+        if(request.getContact()!=null){
+            updatedCustomer.setContact(request.getContact());
+        }
+        if(request.getMilkRates()!=null){
+            updatedCustomer.setMilkRates(request.getMilkRates());
+        }
+
+
+        return customerRepo.save(updatedCustomer);
     }
     public List<Customer> getAllCustomers(){
 

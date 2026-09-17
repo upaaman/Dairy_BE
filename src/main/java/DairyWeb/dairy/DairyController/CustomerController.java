@@ -1,5 +1,6 @@
 package DairyWeb.dairy.DairyController;
 
+import DairyWeb.dairy.DairyDTOs.RequestDTO.CustomerSellerUpdateDTO;
 import DairyWeb.dairy.DairyEntities.Customer;
 import DairyWeb.dairy.DairyServices.CustomerService;
 import jakarta.validation.Valid;
@@ -23,6 +24,15 @@ public class CustomerController {
     @GetMapping("/getAll")
     public ResponseEntity<List<Customer>> getAllCustomers(){
         return ResponseEntity.status(200).body(customerService.getAllCustomers());
+    }
+
+    @PatchMapping("/update/{id}")
+    public String updateCustomerById(
+            @PathVariable Long id,
+            @Valid  @RequestBody CustomerSellerUpdateDTO customer){
+
+        customerService.updateCustomer(id,customer);
+        return "Customer updated successfully.";
     }
 
     @DeleteMapping("/delete/{id}")

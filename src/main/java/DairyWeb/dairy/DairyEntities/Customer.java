@@ -2,6 +2,8 @@ package DairyWeb.dairy.DairyEntities;
 
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.MilkRates;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Customer {
@@ -9,6 +11,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Please enter a valid name for customer")
     private String name;
 
     public Long getId() {
@@ -43,8 +46,9 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
-
+    @NotBlank(message = "Please enter a valid contact information of customer")
     private String contact;
+    @NotBlank(message = "Please enter a valid address details of customer")
     private String address;
 
     public MilkRates getMilkRates() {
@@ -55,6 +59,7 @@ public class Customer {
         this.milkRates = milkRates;
     }
 
+    @Valid
     @Embedded
     private MilkRates milkRates;
 

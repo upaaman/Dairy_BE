@@ -1,8 +1,6 @@
 package DairyWeb.dairy.DairyServices;
 
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.DashboardResDTO;
-import DairyWeb.dairy.DairyEntities.MilkPurchase;
-import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
 import DairyWeb.dairy.DairyRepository.MilkPurchaseRepo;
 import DairyWeb.dairy.DairyRepository.MilkSaleRepo;

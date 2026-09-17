@@ -1,5 +1,6 @@
 package DairyWeb.dairy.DairyController;
 
+import DairyWeb.dairy.DairyDTOs.RequestDTO.CustomerSellerUpdateDTO;
 import DairyWeb.dairy.DairyEntities.Seller;
 import DairyWeb.dairy.DairyServices.SellerService;
 import jakarta.validation.Valid;
@@ -20,6 +21,15 @@ public class SellerController {
     @PostMapping("/create")
     public Seller addSeller(@Valid @RequestBody Seller seller){
         return sellerService.createSeller(seller);
+    }
+
+    @PatchMapping("/update/{id}")
+    public String updateCustomerById(
+            @PathVariable Long id,
+            @Valid  @RequestBody CustomerSellerUpdateDTO seller){
+
+        sellerService.updateSeller(id,seller);
+        return "Seller updated successfully.";
     }
 
 
