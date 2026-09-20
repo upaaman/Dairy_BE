@@ -4,6 +4,7 @@ import DairyWeb.dairy.DairyDTOs.ResponseDTOs.DashboardResDTO;
 import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
 import DairyWeb.dairy.DairyRepository.MilkPurchaseRepo;
 import DairyWeb.dairy.DairyRepository.MilkSaleRepo;
+import DairyWeb.dairy.DairyRepository.SalaryTransactionRepo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -18,12 +19,14 @@ public class DashboardService {
     private MilkProductionRepo milkProductionRepo;
     private MilkPurchaseRepo milkPurchaseRepo;
     private MilkSaleRepo milkSaleRepo;
+    private SalaryTransactionRepo salaryTransactionRepo;
 
 
-    public DashboardService(MilkProductionRepo milkProductionRepo, MilkPurchaseRepo milkPurchaseRepo, MilkSaleRepo milkSaleRepo) {
+    public DashboardService(MilkProductionRepo milkProductionRepo, MilkPurchaseRepo milkPurchaseRepo, MilkSaleRepo milkSaleRepo, SalaryTransactionRepo salaryTransactionRepo) {
         this.milkProductionRepo = milkProductionRepo;
         this.milkPurchaseRepo=milkPurchaseRepo;
         this.milkSaleRepo=milkSaleRepo;
+        this.salaryTransactionRepo=salaryTransactionRepo;
     }
 
     public BigDecimal getTotalMilkProduction(
@@ -63,6 +66,15 @@ public class DashboardService {
             LocalDate endDate) {
 
         return milkSaleRepo.getTotalMilkSaleQuantity(
+                startDate,
+                endDate
+        );
+
+    } public BigDecimal getTotalSalariesPaid(
+            LocalDate startDate,
+            LocalDate endDate) {
+
+        return salaryTransactionRepo.getTotalSalariesPaid(
                 startDate,
                 endDate
         );
@@ -139,6 +151,9 @@ public class DashboardService {
         BigDecimal totalSaleAmount =
                 getTotalMilkSaleAmount(startDate, endDate);
 
+        BigDecimal totalSalariesPaid =
+                getTotalSalariesPaid(startDate, endDate);
+
         LocalDate[] previousPeriod =getPreviousPeriod(startDate, endDate);
 
 
@@ -175,6 +190,12 @@ public class DashboardService {
                         previousEndDate
                 );
 
+        BigDecimal previousSalariesPaid =
+                getTotalSalariesPaid(
+                        previousStartDate,
+                        previousEndDate
+                );
+
 
         // Percentage changes
         BigDecimal productionChange =
@@ -206,17 +227,11 @@ public class DashboardService {
                         totalSaleAmount,
                         previousSaleAmount
                 );
-
-System.out.println(totalProduction+" " +previousProduction+" ->"+productionChange+"aman is temp" + totalProduction +
-       " "+ productionChange
-      + " "+ totalPurchaseQuantity
-      + " "+ purchaseQuantityChange
-      + " "+ totalPurchaseAmount
-      + " "+ purchaseAmountChange
-      + " "+ totalSaleQuantity
-      + " "+ saleQuantityChange
-      + " "+ totalSaleAmount
-      + " "+ saleAmountChange);
+        BigDecimal salariesPaidChange =
+                calculatePercentageChange(
+                        totalSalariesPaid,
+                        previousSalariesPaid
+                );
         return new DashboardResDTO(
                 totalProduction,
                 productionChange,
@@ -227,7 +242,9 @@ System.out.println(totalProduction+" " +previousProduction+" ->"+productionChang
                 totalSaleQuantity,
                 saleQuantityChange,
                 totalSaleAmount,
-                saleAmountChange
+                saleAmountChange,
+                totalSalariesPaid,
+                salariesPaidChange
         );
     }
 

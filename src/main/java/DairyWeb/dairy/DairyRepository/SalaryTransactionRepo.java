@@ -7,8 +7,21 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public interface SalaryTransactionRepo extends JpaRepository<SalaryTransaction,Long>, JpaSpecificationExecutor<SalaryTransaction> {
+
+    @Query("""
+    SELECT COALESCE(SUM(s.amount), 0)
+    FROM SalaryTransaction s
+    WHERE s.type = 'PAYMENT'
+    AND s.transactionDate >= :startDate
+    AND s.transactionDate <= :endDate
+""")
+    BigDecimal getTotalSalariesPaid(
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 
     @Query("""
     SELECT COALESCE(SUM(

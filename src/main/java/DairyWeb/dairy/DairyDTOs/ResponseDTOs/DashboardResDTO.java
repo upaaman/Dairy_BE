@@ -12,8 +12,19 @@ public class DashboardResDTO {
     private BigDecimal totalPurchaseAmountChange;
     private BigDecimal totalSaleQuantity;
     private BigDecimal totalSaleQuantityChange;
+
+
     private BigDecimal totalSaleAmount;
     private BigDecimal totalSaleAmountChange;
+    private BigDecimal totalSalariesPaid;
+    private BigDecimal salariesPaidChange;
+
+    public BigDecimal getSalariesPaidChange() {
+        return salariesPaidChange;
+    }
+    public BigDecimal getTotalSalariesPaid() {
+        return totalSalariesPaid;
+    }
 
     public BigDecimal getTotalProduction() {
         return totalProduction;
@@ -55,7 +66,7 @@ public class DashboardResDTO {
         return totalSaleAmountChange;
     }
 
-    public DashboardResDTO(BigDecimal totalProduction, BigDecimal totalProductionChange, BigDecimal totalPurchaseQuantity, BigDecimal totalPurchaseQuantityChange, BigDecimal totalPurchaseAmount, BigDecimal totalPurchaseAmountChange, BigDecimal totalSaleQuantity, BigDecimal totalSaleQuantityChange, BigDecimal totalSaleAmount, BigDecimal totalSaleAmountChange) {
+    public DashboardResDTO(BigDecimal totalProduction, BigDecimal totalProductionChange, BigDecimal totalPurchaseQuantity, BigDecimal totalPurchaseQuantityChange, BigDecimal totalPurchaseAmount, BigDecimal totalPurchaseAmountChange, BigDecimal totalSaleQuantity, BigDecimal totalSaleQuantityChange, BigDecimal totalSaleAmount, BigDecimal totalSaleAmountChange, BigDecimal totalSalariesPaid, BigDecimal salariesPaidChange) {
         this.totalProduction = totalProduction;
         this.totalProductionChange = totalProductionChange;
         this.totalPurchaseQuantity = totalPurchaseQuantity;
@@ -66,6 +77,7 @@ public class DashboardResDTO {
         this.totalSaleQuantityChange = totalSaleQuantityChange;
         this.totalSaleAmount = totalSaleAmount;
         this.totalSaleAmountChange = totalSaleAmountChange;
+        this.totalSalariesPaid = totalSalariesPaid;
+        this.salariesPaidChange = salariesPaidChange;
     }
-
 }
