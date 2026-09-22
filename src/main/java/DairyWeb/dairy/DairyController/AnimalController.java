@@ -4,6 +4,7 @@ import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
+import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyServices.AnimalService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -58,6 +59,16 @@ public class AnimalController {
          animalService.updateAnimal(id,updatedAnimalReq);
          return "Animal updated successfully.";
     }
+
+    @GetMapping("/getAllMilkProductionAnimals")
+    public ResponseEntity<List<Animal>> getAnimalsForProduction(
+            @RequestParam LocalDate productionDate,
+            @RequestParam MilkShifts shift
+            ){
+        List<Animal> allAnimalsList=animalService.getAnimalsForProduction(productionDate,shift);
+        return ResponseEntity.status(200).body(allAnimalsList);
+    }
+
 
     @DeleteMapping("/deleteAnimal/{id}")
     public  ResponseEntity<String> deleteAnimalWithId(@PathVariable Long id){

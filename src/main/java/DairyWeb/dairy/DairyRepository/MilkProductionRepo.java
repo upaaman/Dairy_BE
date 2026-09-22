@@ -45,5 +45,10 @@ public interface MilkProductionRepo extends JpaRepository<MilkProduction,Long>,
             LocalDate startDate,
             LocalDate endDate
     );
+    boolean existsByAnimalIdAndProductionDateAndProductionShift(
+            Long animalId,
+            LocalDate productionDate,
+            MilkShifts productionShift
+    );
 
 }

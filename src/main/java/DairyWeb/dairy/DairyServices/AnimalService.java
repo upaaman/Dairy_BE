@@ -6,6 +6,8 @@ import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyEntities.Expense;
 import DairyWeb.dairy.DairyEntities.MilkProduction;
+import DairyWeb.dairy.DairyEnums.AnimalStatus;
+import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
 import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.AnimalRepo;
@@ -139,6 +141,26 @@ public class AnimalService {
         }
      Animal updatedAnimal=   animalRepo.save(animal);
        return "Done";
+    }
+
+    public List<Animal> getAnimalsForProduction(
+            LocalDate productionDate,
+            MilkShifts shift
+    ) {
+
+        List<Animal> animals =
+                animalRepo.findByActiveTrueAndStatus(AnimalStatus.PRODUCING);
+
+        return animals.stream()
+                .filter(animal ->
+                        !milkProductionRepo
+                                .existsByAnimalIdAndProductionDateAndProductionShift(
+                                        animal.getId(),
+                                        productionDate,
+                                        shift
+                                )
+                )
+                .toList();
     }
 
     public String deleteAnimalById(Long Id){
