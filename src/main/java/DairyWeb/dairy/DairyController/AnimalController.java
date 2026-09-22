@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -34,8 +35,11 @@ public class AnimalController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Animal> getAnimalById(@PathVariable Long id){
-        Animal animal=animalService.getAnimalById(id);
+    public ResponseEntity<AnimalResDTO> getAnimalById(@PathVariable Long id,
+    @RequestParam(required = false) LocalDate startDate,
+    @RequestParam (required = false)LocalDate endDate
+    ){
+        AnimalResDTO animal=animalService.getAnimalById(id,startDate,endDate);
         if(animal!=null){
         return ResponseEntity.status(200).body(animal);
         }

@@ -4,11 +4,17 @@ import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
+import DairyWeb.dairy.DairyEntities.Expense;
+import DairyWeb.dairy.DairyEntities.MilkProduction;
 import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
 import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.AnimalRepo;
+import DairyWeb.dairy.DairyRepository.ExpenseRepo;
+import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,8 +24,12 @@ public class AnimalService {
 
 
     private AnimalRepo animalRepo;
-    public AnimalService(AnimalRepo animalRepo){
+    private MilkProductionRepo milkProductionRepo;
+    private ExpenseRepo expenseRepo;
+    public AnimalService(AnimalRepo animalRepo, MilkProductionRepo milkProductionRepo, ExpenseRepo expenseRepo){
         this.animalRepo=animalRepo;
+        this.milkProductionRepo=milkProductionRepo;
+        this.expenseRepo=expenseRepo;
     }
 
     public AnimalResDTO createAnimal(AnimalCreateReqDTO dto) {
@@ -53,14 +63,50 @@ public class AnimalService {
         return temp;
     }
 
-    public Animal getAnimalById(Long id){
-        Optional<Animal> temp = animalRepo.findById(id);
+    public AnimalResDTO getAnimalById(Long id, LocalDate startDate , LocalDate endDate){
 
-        return temp.orElseThrow(() ->
-                new AnimalNotFoundException(
-                        "Animal not found with id: " + id
-                )
+        Animal temp = animalRepo.findById(id).orElseThrow(
+                ()-> new BusinessException("Animal not found with this id : ")
         );
+        List<MilkProduction> milkProductionList=milkProductionRepo.findByAnimalIdAndProductionDateBetweenOrderByProductionDateDesc(
+                id,
+                startDate,
+                endDate
+        );
+        BigDecimal totalMilkProduced=milkProductionRepo.getTotalMilkProductionByAnimal(id,startDate,endDate);
+
+        List<Expense> expenseRecord=expenseRepo.findByAnimalIdAndExpenseDateBetween(
+                id,
+                startDate,
+                endDate
+        );
+        System.out.println(expenseRecord+"upda");
+        BigDecimal totalExpenseOfAnimal=expenseRepo.getTotalExpenseOfAnimal(
+                id,
+                startDate,
+                endDate
+        );
+
+        AnimalResDTO resAnimal = new AnimalResDTO();
+
+        resAnimal.setName(temp.getName());
+        resAnimal.setGender(temp.getGender());
+        resAnimal.setType(temp.getType());
+        resAnimal.setBreed(temp.getBreed());
+        resAnimal.setStatus(temp.getStatus());
+        resAnimal.setNotes(temp.getNotes());
+        resAnimal.setDateOfBirth(temp.getDateOfBirth());
+        resAnimal.setPurchasePrice(temp.getPurchasePrice());
+        resAnimal.setDateOfBirth(temp.getDateOfBirth());
+        resAnimal.setMilkProductionList(milkProductionList);
+        resAnimal.setTotalMilkProduced(totalMilkProduced);
+        resAnimal.setTotalExpense(totalExpenseOfAnimal);
+        resAnimal.setExpenseRecordOfAnimal(expenseRecord);
+        resAnimal.setId(temp.getId());
+
+
+        return resAnimal;
+
     }
     public String updateAnimal(Long id, AnimalUpdateReqDTO request){
         Animal animal=animalRepo.findById(id)

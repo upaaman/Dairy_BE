@@ -1,6 +1,7 @@
 package DairyWeb.dairy.DairyController;
 
 import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkProductionRequestDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkProductionUpdateDTO;
 import DairyWeb.dairy.DairyEntities.MilkProduction;
 import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
@@ -24,6 +25,11 @@ public class MilkProductionController {
     public MilkProduction addMilkProduction(
             @Valid @RequestBody MilkProductionRequestDTO requestDTO){
         return milkProductionService.createMilkProduction(requestDTO);
+    }
+
+    @PatchMapping("/update/{id}")
+    public MilkProduction updateMilkProduction(@PathVariable Long id , @Valid @RequestBody MilkProductionUpdateDTO requestDTO){
+        return milkProductionService.updateMilkProduction(id,requestDTO);
     }
 
     @GetMapping("/getAll")

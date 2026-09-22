@@ -1,10 +1,16 @@
 package DairyWeb.dairy.DairyServices;
 
+import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkProductionUpdateDTO;
 import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkSaleRequstDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkSaleUpdateDTO;
+import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyEntities.Customer;
+import DairyWeb.dairy.DairyEntities.MilkProduction;
 import DairyWeb.dairy.DairyEntities.MilkSale;
 import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
+import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
+import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.CustomerRepo;
 import DairyWeb.dairy.DairyRepository.MilkSaleRepo;
 import DairyWeb.dairy.DairySpecifications.MilkSaleSpecification;
@@ -44,6 +50,25 @@ public class MilkSaleService {
 
     }
 
+public MilkSale updateMilkSale(Long id, MilkSaleUpdateDTO req){
+    MilkSale milkSale=milkSaleRepo.findById(id).orElseThrow(
+            ()-> new BusinessException("Milk sale not found with this id")
+    );
+    Customer customer=customerRepo.findById(req.getCustomerId()).orElseThrow(
+            ()-> new BusinessException("Customer not found with this id")
+    );
+
+    milkSale.setSaleDate(req.getSaleDate());
+    milkSale.setQuantity(req.getQuantity());
+    milkSale.setRate(req.getRate());
+    milkSale.setShift(req.getShift());
+    milkSale.setAnimalType(req.getAnimalType());
+    milkSale.setAmount(req.getAmount());
+    milkSale.setCustomer(customer);
+
+
+    return milkSaleRepo.save(milkSale);
+}
 
 
     public List<MilkSale> getAllMilkSale(

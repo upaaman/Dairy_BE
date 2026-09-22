@@ -1,10 +1,12 @@
 package DairyWeb.dairy.DairyController;
 
 import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkSaleRequstDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkSaleUpdateDTO;
 import DairyWeb.dairy.DairyEntities.MilkSale;
 import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyServices.MilkSaleService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +30,12 @@ public class MilkSaleController {
         return ResponseEntity.status(200).body(temp);
     }
 
+    @PatchMapping("/update/{id}")
+    public MilkSale updateMilkSale(@PathVariable Long id ,@Valid @RequestBody MilkSaleUpdateDTO request){
+       return milkSaleService.updateMilkSale(id,request);
+
+    }
+
     @GetMapping("/getAll")
     public ResponseEntity<List<MilkSale>> getAllMilkSale(
             @RequestParam(required = false) LocalDate startDate,
@@ -36,7 +44,6 @@ public class MilkSaleController {
             @RequestParam(required = false) AnimalType animalType,
             @RequestParam (required = false)Long customerId
     ){
-        System.out.println("aman in getAllSales");
         List<MilkSale> temp=milkSaleService.getAllMilkSale(startDate,endDate,shift,animalType,customerId);
         return ResponseEntity.status(200).body(temp);
     }

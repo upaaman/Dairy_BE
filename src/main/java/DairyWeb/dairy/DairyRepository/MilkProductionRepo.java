@@ -27,4 +27,23 @@ public interface MilkProductionRepo extends JpaRepository<MilkProduction,Long>,
             LocalDate endDate
     );
 
+    @Query("""
+        SELECT COALESCE(SUM(m.quantity), 0)
+        FROM MilkProduction m
+        WHERE m.productionDate >= :startDate
+        AND m.productionDate <= :endDate
+        AND m.animal.id = :animalId
+        """)
+    BigDecimal getTotalMilkProductionByAnimal(
+            Long animalId,
+            LocalDate startDate,
+            LocalDate endDate
+    );
+
+    List<MilkProduction> findByAnimalIdAndProductionDateBetweenOrderByProductionDateDesc(
+            Long animalId,
+            LocalDate startDate,
+            LocalDate endDate
+    );
+
 }

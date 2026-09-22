@@ -1,11 +1,13 @@
 package DairyWeb.dairy.DairyServices;
 
 import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkProductionRequestDTO;
+import DairyWeb.dairy.DairyDTOs.RequestDTO.MilkProductionUpdateDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyEntities.MilkProduction;
 import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
+import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.AnimalRepo;
 import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
 import DairyWeb.dairy.DairySpecifications.MilkProductionSpecification;
@@ -30,6 +32,22 @@ public class MilkProductionService {
 
         MilkProduction production=new MilkProduction();
 
+        production.setAnimal(animal);
+        production.setQuantity(request.getQuantity());
+        production.setProductionShift(request.getShift());
+        production.setProductionDate(request.getProductionDate());
+
+        return milkProductionRepo.save(production);
+    }
+
+    public MilkProduction updateMilkProduction(Long id,MilkProductionUpdateDTO request){
+        Animal animal=animalRepo.findById(request.getAnimalId())
+                .orElseThrow(()->new AnimalNotFoundException("Animal not found with id " +request.getAnimalId()));
+
+        MilkProduction production=milkProductionRepo.findById(id).orElseThrow(
+                ()-> new BusinessException("No data found with this id")
+        );
+        System.out.println(request.getAnimalId()+" --"+ request.getProductionDate()+"test");
         production.setAnimal(animal);
         production.setQuantity(request.getQuantity());
         production.setProductionShift(request.getShift());
