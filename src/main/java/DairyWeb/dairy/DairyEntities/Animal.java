@@ -65,18 +65,6 @@ public class Animal{
         this.name = name;
     }
 
-    public Animal(Long id, AnimalGender gender, String breed, BigDecimal purchasePrice, String name, LocalDate dateOfBirth, LocalDate dateOfPurchase, AnimalStatus status, AnimalType type,String notes) {
-        this.id = id;
-        this.gender = gender;
-        this.breed = breed;
-        this.purchasePrice = purchasePrice;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.dateOfPurchase = dateOfPurchase;
-        this.status = status;
-        this.type = type;
-        this.notes=notes;
-    }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
@@ -127,6 +115,30 @@ public class Animal{
 
     @Enumerated(EnumType.STRING)
     private AnimalStatus status;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+       this.active=active;
+    }
+
     @Enumerated(EnumType.STRING)
     private AnimalType type;
+    private Boolean active ;
+
+    public Animal(Long id, AnimalGender gender, String breed, BigDecimal purchasePrice, String name, LocalDate dateOfBirth, LocalDate dateOfPurchase, String notes, AnimalStatus status, AnimalType type, Boolean active) {
+        this.id = id;
+        this.gender = gender;
+        this.breed = breed;
+        this.purchasePrice = purchasePrice;
+        this.name = name;
+        this.dateOfBirth = dateOfBirth;
+        this.dateOfPurchase = dateOfPurchase;
+        this.notes = notes;
+        this.status = status;
+        this.type = type;
+        this.active = active;
+    }
 }

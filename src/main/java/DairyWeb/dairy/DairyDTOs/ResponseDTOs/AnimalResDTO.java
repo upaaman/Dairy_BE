@@ -14,6 +14,7 @@ public class AnimalResDTO {
     private AnimalGender gender;
     private String breed;
     private String name;
+    private Boolean active;
 
 
     public AnimalGender getGender() {
@@ -131,6 +132,14 @@ public class AnimalResDTO {
 
     public void setExpenseRecordOfAnimal(List<Expense> expenseRecordOfAnimal) {
         this.expenseRecordOfAnimal = expenseRecordOfAnimal;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     private List<Expense> expenseRecordOfAnimal;

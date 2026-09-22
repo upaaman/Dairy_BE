@@ -28,6 +28,11 @@ public class AnimalController {
         return ResponseEntity.status(201).body(temp);
     }
 
+    @GetMapping("/getAll/inactive")
+    public ResponseEntity<List<Animal>> getAllInactiveAnimals(){
+        List<Animal> allAnimalsList=animalService.getAllInactiveAnimals();
+        return ResponseEntity.status(200).body(allAnimalsList);
+    }
     @GetMapping("/getAll")
     public ResponseEntity<List<Animal>> getAllAnimals(){
         List<Animal> allAnimalsList=animalService.getAllAnimals();

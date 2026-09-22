@@ -6,6 +6,15 @@ public class AnimalUpdateReqDTO {
     private String name;
     private AnimalStatus status;
     private String notes;
+    private Boolean active;
+
+    public void setActive(Boolean active) {
+       this.active=active;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
 
     public String getName() {
         return name;

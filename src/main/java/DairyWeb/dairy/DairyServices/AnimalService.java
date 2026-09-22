@@ -44,6 +44,7 @@ public class AnimalService {
         animal.setName(dto.getName());
         animal.setStatus(dto.getStatus());
         animal.setNotes(dto.getNotes());
+        animal.setActive(true);
 
         Animal savedAnimal= animalRepo.save(animal);
 
@@ -59,7 +60,12 @@ public class AnimalService {
     }
 
     public List<Animal> getAllAnimals(){
-        List<Animal> temp= animalRepo.findAll();
+        List<Animal> temp= animalRepo.findByActiveTrue();
+        return temp;
+    }
+
+    public List<Animal> getAllInactiveAnimals(){
+        List<Animal> temp= animalRepo.findByActiveFalse();
         return temp;
     }
 
@@ -80,7 +86,6 @@ public class AnimalService {
                 startDate,
                 endDate
         );
-        System.out.println(expenseRecord+"upda");
         BigDecimal totalExpenseOfAnimal=expenseRepo.getTotalExpenseOfAnimal(
                 id,
                 startDate,
@@ -103,6 +108,7 @@ public class AnimalService {
         resAnimal.setTotalExpense(totalExpenseOfAnimal);
         resAnimal.setExpenseRecordOfAnimal(expenseRecord);
         resAnimal.setId(temp.getId());
+        resAnimal.setActive(temp.getActive());
 
 
         return resAnimal;
@@ -126,6 +132,10 @@ public class AnimalService {
         }
         if(request.getNotes()!=null){
             animal.setNotes(request.getNotes().trim());
+        }
+            System.out.println(request.getActive()+" aman"+ request.getName());
+        if(request.getActive()!=null){
+            animal.setActive(request.getActive());
         }
      Animal updatedAnimal=   animalRepo.save(animal);
        return "Done";
