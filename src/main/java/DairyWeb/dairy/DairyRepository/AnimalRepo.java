@@ -2,6 +2,7 @@ package DairyWeb.dairy.DairyRepository;
 
 import DairyWeb.dairy.DairyEntities.Animal;
 import DairyWeb.dairy.DairyEnums.AnimalStatus;
+import DairyWeb.dairy.DairyEnums.AnimalType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -4,13 +4,16 @@ import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
+import DairyWeb.dairy.DairyEntities.Breeding;
 import DairyWeb.dairy.DairyEntities.Expense;
 import DairyWeb.dairy.DairyEntities.MilkProduction;
 import DairyWeb.dairy.DairyEnums.AnimalStatus;
+import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyExceptions.AnimalNotFoundException;
 import DairyWeb.dairy.DairyExceptions.BusinessException;
 import DairyWeb.dairy.DairyRepository.AnimalRepo;
+import DairyWeb.dairy.DairyRepository.BreedingRepo;
 import DairyWeb.dairy.DairyRepository.ExpenseRepo;
 import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
 import org.springframework.stereotype.Service;
@@ -28,10 +31,12 @@ public class AnimalService {
     private AnimalRepo animalRepo;
     private MilkProductionRepo milkProductionRepo;
     private ExpenseRepo expenseRepo;
-    public AnimalService(AnimalRepo animalRepo, MilkProductionRepo milkProductionRepo, ExpenseRepo expenseRepo){
+    private BreedingRepo breedingRepo;
+    public AnimalService(AnimalRepo animalRepo, MilkProductionRepo milkProductionRepo, ExpenseRepo expenseRepo,BreedingRepo breedingRepo){
         this.animalRepo=animalRepo;
         this.milkProductionRepo=milkProductionRepo;
         this.expenseRepo=expenseRepo;
+        this.breedingRepo=breedingRepo;
     }
 
     public AnimalResDTO createAnimal(AnimalCreateReqDTO dto) {
@@ -61,8 +66,15 @@ public class AnimalService {
         return animalRes;
     }
 
-    public List<Animal> getAllAnimals(){
-        List<Animal> temp= animalRepo.findByActiveTrue();
+    public List<Animal> getAllAnimals(AnimalStatus status,Boolean includeInactiveAsWell){
+        List<Animal> temp =null;
+        if(includeInactiveAsWell!=null && includeInactiveAsWell){
+            temp=animalRepo.findAll();
+        }
+        else if(status!=null){
+            temp=animalRepo.findByActiveTrueAndStatus(status);
+        }
+        else temp= animalRepo.findByActiveTrue();
         return temp;
     }
 
@@ -71,6 +83,21 @@ public class AnimalService {
         return temp;
     }
 
+    private AnimalResDTO mapToBasicAnimalDTO(Animal animal) {
+
+        AnimalResDTO dto = new AnimalResDTO();
+
+        dto.setId(animal.getId());
+        dto.setName(animal.getName());
+        dto.setGender(animal.getGender());
+        dto.setType(animal.getType());
+        dto.setBreed(animal.getBreed());
+        dto.setDateOfBirth(animal.getDateOfBirth());
+        dto.setStatus(animal.getStatus());
+        dto.setActive(animal.getActive());
+
+        return dto;
+    }
     public AnimalResDTO getAnimalById(Long id, LocalDate startDate , LocalDate endDate){
 
         Animal temp = animalRepo.findById(id).orElseThrow(
@@ -94,6 +121,27 @@ public class AnimalService {
                 endDate
         );
 
+        // CHILD ANIMALS
+        List<Breeding> breedings =
+                breedingRepo.findByAnimalIdAndProducedAnimalIsNotNull(id);
+        List<AnimalResDTO> childAnimals =
+                breedings.stream()
+                        .map(Breeding::getProducedAnimal)
+                        .map(this::mapToBasicAnimalDTO)
+                        .toList();
+
+        // MOTHER
+        Optional<Breeding> motherBreeding =
+                breedingRepo.findFirstByProducedAnimalId(id);
+
+        AnimalResDTO mother = null;
+
+        if (motherBreeding.isPresent()) {
+            mother = mapToBasicAnimalDTO(
+                    motherBreeding.get().getAnimal()
+            );
+        }
+
         AnimalResDTO resAnimal = new AnimalResDTO();
 
         resAnimal.setName(temp.getName());
@@ -111,6 +159,8 @@ public class AnimalService {
         resAnimal.setExpenseRecordOfAnimal(expenseRecord);
         resAnimal.setId(temp.getId());
         resAnimal.setActive(temp.getActive());
+        resAnimal.setChildAnimals(childAnimals);
+        resAnimal.setMother(mother);
 
 
         return resAnimal;

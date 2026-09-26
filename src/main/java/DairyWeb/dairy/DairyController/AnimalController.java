@@ -4,6 +4,8 @@ import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalCreateReqDTO;
 import DairyWeb.dairy.DairyDTOs.RequestDTO.AnimalUpdateReqDTO;
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.AnimalResDTO;
 import DairyWeb.dairy.DairyEntities.Animal;
+import DairyWeb.dairy.DairyEnums.AnimalStatus;
+import DairyWeb.dairy.DairyEnums.AnimalType;
 import DairyWeb.dairy.DairyEnums.MilkShifts;
 import DairyWeb.dairy.DairyServices.AnimalService;
 import jakarta.validation.Valid;
@@ -35,8 +37,11 @@ public class AnimalController {
         return ResponseEntity.status(200).body(allAnimalsList);
     }
     @GetMapping("/getAll")
-    public ResponseEntity<List<Animal>> getAllAnimals(){
-        List<Animal> allAnimalsList=animalService.getAllAnimals();
+    public ResponseEntity<List<Animal>> getAllAnimals(
+            @RequestParam(required = false) AnimalStatus status,
+            @RequestParam(required = false) Boolean includeInactiveAsWell
+            ){
+        List<Animal> allAnimalsList=animalService.getAllAnimals(status,includeInactiveAsWell);
         return ResponseEntity.status(200).body(allAnimalsList);
     }
 

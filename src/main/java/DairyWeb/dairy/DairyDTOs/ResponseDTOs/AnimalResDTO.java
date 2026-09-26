@@ -15,10 +15,28 @@ public class AnimalResDTO {
     private String breed;
     private String name;
     private Boolean active;
+    private AnimalResDTO mother;
+    private List<AnimalResDTO> childAnimals;
 
 
     public AnimalGender getGender() {
         return gender;
+    }
+
+    public AnimalResDTO getMother() {
+        return mother;
+    }
+
+    public void setMother(AnimalResDTO mother) {
+        this.mother = mother;
+    }
+
+    public List<AnimalResDTO> getChildAnimals() {
+        return childAnimals;
+    }
+
+    public void setChildAnimals(List<AnimalResDTO> childAnimals) {
+        this.childAnimals = childAnimals;
     }
 
     public void setGender(AnimalGender gender) {

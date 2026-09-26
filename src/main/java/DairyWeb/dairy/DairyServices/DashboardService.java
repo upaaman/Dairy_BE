@@ -1,10 +1,7 @@
 package DairyWeb.dairy.DairyServices;
 
 import DairyWeb.dairy.DairyDTOs.ResponseDTOs.DashboardResDTO;
-import DairyWeb.dairy.DairyRepository.MilkProductionRepo;
-import DairyWeb.dairy.DairyRepository.MilkPurchaseRepo;
-import DairyWeb.dairy.DairyRepository.MilkSaleRepo;
-import DairyWeb.dairy.DairyRepository.SalaryTransactionRepo;
+import DairyWeb.dairy.DairyRepository.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,13 +17,15 @@ public class DashboardService {
     private MilkPurchaseRepo milkPurchaseRepo;
     private MilkSaleRepo milkSaleRepo;
     private SalaryTransactionRepo salaryTransactionRepo;
+    private ExpenseRepo expenseRepo;
 
 
-    public DashboardService(MilkProductionRepo milkProductionRepo, MilkPurchaseRepo milkPurchaseRepo, MilkSaleRepo milkSaleRepo, SalaryTransactionRepo salaryTransactionRepo) {
+    public DashboardService(MilkProductionRepo milkProductionRepo, MilkPurchaseRepo milkPurchaseRepo, MilkSaleRepo milkSaleRepo, SalaryTransactionRepo salaryTransactionRepo,ExpenseRepo expenseRepo) {
         this.milkProductionRepo = milkProductionRepo;
         this.milkPurchaseRepo=milkPurchaseRepo;
         this.milkSaleRepo=milkSaleRepo;
         this.salaryTransactionRepo=salaryTransactionRepo;
+        this.expenseRepo=expenseRepo;
     }
 
     public BigDecimal getTotalMilkProduction(
@@ -85,6 +84,17 @@ public class DashboardService {
             LocalDate endDate) {
 
         return milkSaleRepo.getTotalMilkSaleAmount(
+                startDate,
+                endDate
+        );
+
+    }
+    public BigDecimal getTotalExpenseAmount(
+            LocalDate startDate,
+            LocalDate endDate
+    ) {
+
+        return expenseRepo.getTotalExpenseAmount(
                 startDate,
                 endDate
         );
@@ -151,6 +161,9 @@ public class DashboardService {
         BigDecimal totalSaleAmount =
                 getTotalMilkSaleAmount(startDate, endDate);
 
+        BigDecimal totalExpenseAmount =
+                getTotalExpenseAmount(startDate, endDate);
+
         BigDecimal totalSalariesPaid =
                 getTotalSalariesPaid(startDate, endDate);
 
@@ -195,6 +208,11 @@ public class DashboardService {
                         previousStartDate,
                         previousEndDate
                 );
+        BigDecimal previousExpenseAmount =
+                getTotalExpenseAmount(
+                        previousStartDate,
+                        previousEndDate
+                );
 
 
         // Percentage changes
@@ -232,6 +250,11 @@ public class DashboardService {
                         totalSalariesPaid,
                         previousSalariesPaid
                 );
+        BigDecimal expenseAmountChange =
+                calculatePercentageChange(
+                        totalExpenseAmount,
+                        previousExpenseAmount
+                );
         return new DashboardResDTO(
                 totalProduction,
                 productionChange,
@@ -241,6 +264,8 @@ public class DashboardService {
                 purchaseAmountChange,
                 totalSaleQuantity,
                 saleQuantityChange,
+                totalExpenseAmount,
+                expenseAmountChange,
                 totalSaleAmount,
                 saleAmountChange,
                 totalSalariesPaid,
