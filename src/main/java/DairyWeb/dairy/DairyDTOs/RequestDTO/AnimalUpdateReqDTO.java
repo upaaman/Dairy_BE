@@ -8,6 +8,16 @@ public class AnimalUpdateReqDTO {
     private String notes;
     private Boolean active;
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    private String imageUrl;
+
     public void setActive(Boolean active) {
        this.active=active;
     }

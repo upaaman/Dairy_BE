@@ -127,8 +127,17 @@ public class Animal{
     @Enumerated(EnumType.STRING)
     private AnimalType type;
     private Boolean active ;
+    private String imageUrl;
 
-    public Animal(Long id, AnimalGender gender, String breed, BigDecimal purchasePrice, String name, LocalDate dateOfBirth, LocalDate dateOfPurchase, String notes, AnimalStatus status, AnimalType type, Boolean active) {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Animal(Long id, AnimalGender gender, String breed, BigDecimal purchasePrice, String name, LocalDate dateOfBirth, LocalDate dateOfPurchase, String notes, AnimalStatus status, AnimalType type, Boolean active, String imageUrl) {
         this.id = id;
         this.gender = gender;
         this.breed = breed;
@@ -140,5 +149,6 @@ public class Animal{
         this.status = status;
         this.type = type;
         this.active = active;
+        this.imageUrl = imageUrl;
     }
 }

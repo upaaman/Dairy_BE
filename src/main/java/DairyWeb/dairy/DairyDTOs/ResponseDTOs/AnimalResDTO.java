@@ -17,6 +17,7 @@ public class AnimalResDTO {
     private Boolean active;
     private AnimalResDTO mother;
     private List<AnimalResDTO> childAnimals;
+    private String imageUrl;
 
 
     public AnimalGender getGender() {
@@ -104,6 +105,14 @@ public class AnimalResDTO {
 
     public String getNotes() {
         return notes;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setNotes(String notes) {

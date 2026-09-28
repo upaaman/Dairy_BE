@@ -15,9 +15,14 @@ public class ExpenseCreateReqDTO {
     @Positive(message = "Please provide valid positive amount for this expense.")
     @NotNull (message = "Please provide amount for this expense.")
     private Long amount;
+    private String imageUrl;
 
     public String getNotes() {
         return notes;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public LocalDate getExpenseDate() {

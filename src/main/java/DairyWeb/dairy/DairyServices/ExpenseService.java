@@ -27,6 +27,9 @@ public class ExpenseService {
        expense.setExpenseDate(req.getExpenseDate());
        expense.setNotes(req.getNotes());
        expense.setType(req.getType());
+       if(req.getImageUrl()!=null){
+           expense.setImageUrl(req.getImageUrl());
+       }
 
         if (req.getAnimalId() != null) {
             Animal animal = animalRepo.findById(req.getAnimalId())

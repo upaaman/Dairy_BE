@@ -52,6 +52,7 @@ public class AnimalService {
         animal.setStatus(dto.getStatus());
         animal.setNotes(dto.getNotes());
         animal.setActive(true);
+        animal.setImageUrl(dto.getImageUrl());
 
         Animal savedAnimal= animalRepo.save(animal);
 
@@ -161,6 +162,7 @@ public class AnimalService {
         resAnimal.setActive(temp.getActive());
         resAnimal.setChildAnimals(childAnimals);
         resAnimal.setMother(mother);
+        resAnimal.setImageUrl(temp.getImageUrl());
 
 
         return resAnimal;
@@ -188,6 +190,9 @@ public class AnimalService {
             System.out.println(request.getActive()+" aman"+ request.getName());
         if(request.getActive()!=null){
             animal.setActive(request.getActive());
+        }
+        if(request.getImageUrl()!=null){
+            animal.setImageUrl(request.getImageUrl());
         }
      Animal updatedAnimal=   animalRepo.save(animal);
        return "Done";

@@ -12,7 +12,17 @@ public class Expense {
     private Long id;
 
     private ExpenseType type;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     private Long amount;
+    private String imageUrl;
 
     public Long getId() {
         return id;
@@ -70,12 +80,13 @@ public class Expense {
         this.animal = animal;
     }
 
-    public Expense(Long id, ExpenseType type, Long amount, LocalDate expenseDate, String notes, Animal animal) {
+    public Expense(Long id, ExpenseType type, Long amount, LocalDate expenseDate, String notes, Animal animal,String imageUrl) {
         this.id = id;
         this.type = type;
         this.amount = amount;
         this.expenseDate = expenseDate;
         this.notes = notes;
         this.animal = animal;
+        this.imageUrl=imageUrl;
     }
 }

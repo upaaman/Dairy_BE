@@ -24,9 +24,18 @@ public class AnimalCreateReqDTO {
     private BigDecimal purchasePrice;
     private LocalDate dateOfBirth;
     private LocalDate dateOfPurchase;
+    private String imageUrl;
 
     public AnimalGender getGender() {
         return gender;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public void setGender(AnimalGender gender) {
