@@ -20,7 +20,7 @@ public class AnimalCreateReqDTO {
     private AnimalStatus status;
     @NotEmpty (message = "Please select animal breed.")
     private String breed;
-    @Positive (message = "Please select a valid price of animal purchase.")
+    @Positive (message = "Please select a valid  purchase price of animal .")
     private BigDecimal purchasePrice;
     private LocalDate dateOfBirth;
     private LocalDate dateOfPurchase;
